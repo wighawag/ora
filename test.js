@@ -235,3 +235,40 @@ test('erases wrapped lines', t => {
 
 	spinner.stop();
 });
+
+test('indent option', t => {
+	const stream = getPassThroughStream();
+	stream.isTTY = true;
+	let cursorAtRow = 0;
+	stream.cursorTo = indent => {
+		cursorAtRow = indent;
+	};
+
+	const spinner = new Ora({
+		stream,
+		text: 'foo',
+		color: false,
+		isEnabled: true,
+		indent: 7
+	});
+
+	spinner.render();
+	spinner.clear();
+	t.is(cursorAtRow, 7);
+	spinner.stop();
+});
+
+test('indent option throws', t => {
+	const stream = getPassThroughStream();
+
+	const spinner = new Ora({
+		stream,
+		text: 'foo',
+		color: false,
+		isEnabled: true
+	});
+
+	t.throws(() => {
+		spinner.indent = -1;
+	}, 'The `indent` option must be an integer from 0 and up');
+});
