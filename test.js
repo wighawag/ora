@@ -236,6 +236,36 @@ test('erases wrapped lines', t => {
 	spinner.stop();
 });
 
+test('reset frameIndex when setting new spinner', async t => {
+	const stream = getPassThroughStream();
+	const output = getStream(stream);
+
+	const spinner = new Ora({
+		stream,
+		isEnabled: true,
+		spinner: {frames: ['foo', 'fooo']}
+	});
+
+	spinner.render();
+	t.is(spinner.frameIndex, 1);
+
+	spinner.spinner = {frames: ['baz']};
+	spinner.render();
+
+	stream.end();
+
+	t.is(spinner.frameIndex, 0);
+	t.regex(stripAnsi(await output), /foo baz/);
+});
+
+test('throw when incorrect spinner', t => {
+	const ora = new Ora();
+
+	t.throws(() => {
+		ora.spinner = 'random-string-12345';
+	}, /no built-in spinner/);
+});
+
 test('indent option', t => {
 	const stream = getPassThroughStream();
 	stream.isTTY = true;

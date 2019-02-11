@@ -188,6 +188,10 @@ Change the text.
 
 Change the spinner color.
 
+#### .spinner
+
+Change the spinner.
+
 #### .indent
 
 Change the spinner indent.
