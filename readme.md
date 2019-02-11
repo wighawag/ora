@@ -61,7 +61,7 @@ Or an object like:
 
 ```js
 {
-	interval: 80, // optional
+	interval: 80, // Optional
 	frames: ['-', '+', '-']
 }
 ```
@@ -99,7 +99,7 @@ Spinners provide their own recommended interval, so you don't really need to spe
 
 ##### stream
 
-Type: `WritableStream`<br>
+Type: `stream.Writable`<br>
 Default: `process.stderr`
 
 Stream to write the output.

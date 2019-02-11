@@ -178,9 +178,11 @@ test('erases wrapped lines', t => {
 	stream.clearLine = () => {
 		clearedLines++;
 	};
+
 	stream.moveCursor = (dx, dy) => {
 		cursorAtRow += dy;
 	};
+
 	const reset = () => {
 		clearedLines = 0;
 		cursorAtRow = 0;

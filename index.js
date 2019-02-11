@@ -112,9 +112,11 @@ class Ora {
 			if (i > 0) {
 				this.stream.moveCursor(0, -1);
 			}
+
 			this.stream.clearLine();
 			this.stream.cursorTo(this.indent);
 		}
+
 		this.linesToClear = 0;
 
 		return this;
