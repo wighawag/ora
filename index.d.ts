@@ -34,8 +34,8 @@ export type Options = Readonly<{
 	 * @example
 	 *
 	 * {
-	 *     interval: 80, // optional
-	 *     frames: ['-', '+', '-']
+	 * 	interval: 80, // Optional
+	 * 	frames: ['-', '+', '-']
 	 * }
 	 *
 	 */
@@ -105,7 +105,7 @@ export function promise(
 	options?: Options | string
 ): Ora;
 
-export interface PersistOptions {
+export type PersistOptions = Readonly<{
 	/**
 	 * Symbol to replace the spinner with.
 	 *
@@ -114,10 +114,10 @@ export interface PersistOptions {
 	symbol?: string;
 
 	/**
-	 * Text to be persisted. Default value: Current text.
+	 * Text to be persisted. Default: Current text.
 	 */
 	text?: string;
-}
+}>;
 
 export interface Ora {
 	/**
