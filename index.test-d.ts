@@ -1,5 +1,5 @@
 import {expectType} from 'tsd-check';
-import {PassThrough} from 'stream';
+import {PassThrough as PassThroughStream} from 'stream';
 import ora, {promise} from '.';
 
 const spinner = ora('Loading unicorns');
@@ -11,7 +11,7 @@ ora({color: 'cyan'});
 ora({hideCursor: true});
 ora({indent: 1});
 ora({interval: 80});
-ora({stream: new PassThrough()});
+ora({stream: new PassThroughStream()});
 ora({isEnabled: true});
 
 spinner.color = 'yellow';
@@ -41,7 +41,7 @@ spinner.frame();
 const resolves = Promise.resolve(1);
 promise(resolves, 'foo');
 promise(resolves, {
-	stream: new PassThrough(),
+	stream: new PassThroughStream(),
 	text: 'foo',
 	color: 'blue',
 	isEnabled: true

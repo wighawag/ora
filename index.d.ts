@@ -1,5 +1,5 @@
 /// <reference types="node"/>
-import {Writable} from 'stream';
+import {Writable as WritableStream} from 'stream';
 import {SpinnerName} from 'cli-spinners';
 
 export type Spinner = Readonly<{
@@ -76,7 +76,7 @@ export type Options = Readonly<{
 	 *
 	 * @default process.stderr
 	 */
-	stream?: Writable;
+	stream?: WritableStream;
 
 	/**
 	 * Force enable/disable the spinner. If not specified, the spinner will be enabled if the `stream` is being run inside a TTY context (not spawned or piped) and/or not in a CI environment.
