@@ -25,6 +25,11 @@ export type Options = Readonly<{
 	text?: string;
 
 	/**
+	 * Text to display before the spinner.
+	 */
+	prefixText?: string;
+
+	/**
 	 * Name of one of the provided spinners. See [`example.js`](https://github.com/BendingBender/ora/blob/master/example.js) in this repo if you want to test out different spinners. On Windows, it will always use the line spinner as the Windows command-line doesn't have proper Unicode support.
 	 *
 	 * @default 'dots'
@@ -114,9 +119,14 @@ export type PersistOptions = Readonly<{
 	symbol?: string;
 
 	/**
-	 * Text to be persisted. Default: Current text.
+	 * Text to be persisted after the symbol. Default: Current `text`.
 	 */
 	text?: string;
+
+	/**
+	 * Text to be persisted before the symbol. Default: Current `prefixText`.
+	 */
+	prefixText?: string;
 }>;
 
 export interface Ora {
@@ -126,9 +136,14 @@ export interface Ora {
 	readonly isSpinning: boolean;
 
 	/**
-	 * Change the text.
+	 * Change the text after the spinner.
 	 */
 	text: string;
+	
+	/**
+	 * Change the text before the spinner.
+	 */
+	prefixText: string;
 
 	/**
 	 * Change the spinner color.
