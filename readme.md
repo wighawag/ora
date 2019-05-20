@@ -222,6 +222,20 @@ Starts a spinner for a promise. The spinner is stopped with `.succeed()` if the 
 Type: `Promise`
 
 
+## FAQ
+
+### How do I change the color of the text?
+
+Use [Chalk](https://github.com/chalk/chalk):
+
+```js
+const ora = require('ora');
+const chalk = require('chalk');
+
+const spinner = ora(`Loading ${chalk.red('unicorns')}`).start();
+```
+
+
 ## Related
 
 - [cli-spinners](https://github.com/sindresorhus/cli-spinners) - Spinners for use in the terminal

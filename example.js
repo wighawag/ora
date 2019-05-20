@@ -1,4 +1,5 @@
 'use strict';
+const chalk = require('chalk');
 const Ora = require('.');
 
 const spinner = new Ora({
@@ -10,7 +11,7 @@ spinner.start();
 
 setTimeout(() => {
 	spinner.color = 'yellow';
-	spinner.text = 'Loading rainbows';
+	spinner.text = `Loading ${chalk.red('rainbows')}`;
 }, 1000);
 
 setTimeout(() => {
