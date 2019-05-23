@@ -15,10 +15,6 @@
 $ npm install ora
 ```
 
-<a href="https://www.patreon.com/sindresorhus">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
-
 
 ## Usage
 
@@ -42,7 +38,7 @@ If a string is provided, it is treated as a shortcut for [`options.text`](#text)
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 ##### text
 
@@ -58,8 +54,8 @@ Text to display before the spinner.
 
 ##### spinner
 
-Type: `string` `Object`<br>
-Default: `dots` <img src="screenshot-spinner.gif" width="14">
+Type: `string | object`<br>
+Default: `'dots'` <img src="screenshot-spinner.gif" width="14">
 
 Name of one of the [provided spinners](https://github.com/sindresorhus/cli-spinners/blob/master/spinners.json). See `example.js` in this repo if you want to test out different spinners. On Windows, it will always use the `line` spinner as the Windows command-line doesn't have proper Unicode support.
 
@@ -75,8 +71,8 @@ Or an object like:
 ##### color
 
 Type: `string`<br>
-Default: `cyan`<br>
-Values: `black` `red` `green` `yellow` `blue` `magenta` `cyan` `white` `gray`
+Default: `'cyan'`<br>
+Values: `'black'` `'red'` `'green'` `'yellow'` `'blue'` `'magenta'` `'cyan'` `'white'` `'gray'`
 
 Color of the spinner.
 
@@ -156,7 +152,7 @@ Stop the spinner and change the symbol or text. Returns the instance. See the GI
 
 ##### options
 
-Type: `Object`
+Type: `object`
 
 ###### symbol
 
@@ -168,13 +164,13 @@ Symbol to replace the spinner with.
 ###### text
 
 Type: `string`<br>
-Default: Current `text`
+Default: Current `'text'`
 
 Text to be persisted after the symbol
 
 ###### prefixText
 
-Type: `string`<br>
+Type: `st ring`<br>
 Default: Current `prefixText`
 
 Text to be persisted before the symbol.
@@ -213,7 +209,7 @@ Change the spinner.
 
 Change the spinner indent.
 
-### ora.promise(action, [options|text])
+### ora.promise(action, [options | text])
 
 Starts a spinner for a promise. The spinner is stopped with `.succeed()` if the promise fulfills or with `.fail()` if it rejects. Returns the spinner instance.
 
@@ -246,8 +242,3 @@ const spinner = ora(`Loading ${chalk.red('unicorns')}`).start();
 - [marquee-ora](https://github.com/joeycozza/marquee-ora) - Scrolling marquee spinner for Ora
 - [briandowns/spinner](https://github.com/briandowns/spinner) - Terminal spinner/progress indicator for Go
 - [tj/go-spin](https://github.com/tj/go-spin) - Terminal spinner package for Go
-
-
-## License
-
-MIT © [Sindre Sorhus](https://sindresorhus.com)
