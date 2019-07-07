@@ -5,6 +5,7 @@ const cliSpinners = require('cli-spinners');
 const logSymbols = require('log-symbols');
 const stripAnsi = require('strip-ansi');
 const wcwidth = require('wcwidth');
+const isInteractive = require('is-interactive');
 
 const TEXT = Symbol('text');
 const PREFIX_TEXT = Symbol('prefixText');
@@ -29,8 +30,8 @@ class Ora {
 		this.hideCursor = this.options.hideCursor !== false;
 		this.interval = this.options.interval || this.spinner.interval || 100;
 		this.stream = this.options.stream;
-		this.id = null;
-		this.isEnabled = typeof this.options.isEnabled === 'boolean' ? this.options.isEnabled : ((this.stream && this.stream.isTTY) && !process.env.CI);
+		this.id = undefined;
+		this.isEnabled = typeof this.options.isEnabled === 'boolean' ? this.options.isEnabled : isInteractive({stream: this.stream});
 
 		// Set *after* `this.stream`
 		this.text = this.options.text;
@@ -85,7 +86,7 @@ class Ora {
 	}
 
 	get isSpinning() {
-		return this.id !== null;
+		return this.id !== undefined;
 	}
 
 	updateLineCount() {
@@ -178,7 +179,7 @@ class Ora {
 		}
 
 		clearInterval(this.id);
-		this.id = null;
+		this.id = undefined;
 		this.frameIndex = 0;
 		this.clear();
 		if (this.hideCursor) {
