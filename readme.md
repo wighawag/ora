@@ -32,7 +32,8 @@ setTimeout(() => {
 
 ## API
 
-### ora([options|text])
+### ora(text)
+### ora(options)
 
 If a string is provided, it is treated as a shortcut for [`options.text`](#text).
 
@@ -118,7 +119,7 @@ Note that `{isEnabled: false}` doesn't mean it won't output anything. It just me
 
 ### Instance
 
-#### .start([text])
+#### .start(text?)
 
 Start the spinner. Returns the instance. Set the current text if `text` is provided.
 
@@ -126,19 +127,19 @@ Start the spinner. Returns the instance. Set the current text if `text` is provi
 
 Stop and clear the spinner. Returns the instance.
 
-#### .succeed([text])
+#### .succeed(text?)
 
 Stop the spinner, change it to a green `✔` and persist the current text, or `text` if provided. Returns the instance. See the GIF below.
 
-#### .fail([text])
+#### .fail(text?)
 
 Stop the spinner, change it to a red `✖` and persist the current text, or `text` if provided. Returns the instance. See the GIF below.
 
-#### .warn([text])
+#### .warn(text?)
 
 Stop the spinner, change it to a yellow `⚠` and persist the current text, or `text` if provided. Returns the instance.
 
-#### .info([text])
+#### .info(text?)
 
 Stop the spinner, change it to a blue `ℹ` and persist the current text, or `text` if provided. Returns the instance.
 
@@ -146,7 +147,7 @@ Stop the spinner, change it to a blue `ℹ` and persist the current text, or `te
 
 A boolean of whether the instance is currently spinning.
 
-#### .stopAndPersist([options])
+#### .stopAndPersist(options?)
 
 Stop the spinner and change the symbol or text. Returns the instance. See the GIF below.
 
@@ -209,7 +210,8 @@ Change the spinner.
 
 Change the spinner indent.
 
-### ora.promise(action, [options | text])
+### ora.promise(action, text)
+### ora.promise(action, options)
 
 Starts a spinner for a promise. The spinner is stopped with `.succeed()` if the promise fulfills or with `.fail()` if it rejects. Returns the spinner instance.
 
@@ -230,6 +232,10 @@ const chalk = require('chalk');
 
 const spinner = ora(`Loading ${chalk.red('unicorns')}`).start();
 ```
+
+### Why does the spinner freeze?
+
+JavaScript is single-threaded, so synchronous operations blocks the thread, including the spinner animation. Prefer asynchronous operations whenever possible.
 
 
 ## Related
