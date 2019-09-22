@@ -10,6 +10,10 @@ const isInteractive = require('is-interactive');
 const TEXT = Symbol('text');
 const PREFIX_TEXT = Symbol('prefixText');
 
+const noop = () => {};
+
+const ASCII_ETX_CODE = 0x03; // Ctrl+C emits this code
+
 class Ora {
 	constructor(options) {
 		if (typeof options === 'string') {
@@ -21,7 +25,8 @@ class Ora {
 		this.options = Object.assign({
 			text: '',
 			color: 'cyan',
-			stream: process.stderr
+			stream: process.stderr,
+			discardStdin: true
 		}, options);
 
 		this.spinner = this.options.spinner;
@@ -38,6 +43,7 @@ class Ora {
 		this.prefixText = this.options.prefixText;
 		this.linesToClear = 0;
 		this.indent = this.options.indent;
+		this.discardStdin = this.options.discardStdin;
 	}
 
 	get indent() {
@@ -171,6 +177,10 @@ class Ora {
 			cliCursor.hide(this.stream);
 		}
 
+		if (this.discardStdin && process.stdin.isTTY) {
+			this.startDiscardingStdin();
+		}
+
 		this.render();
 		this.id = setInterval(this.render.bind(this), this.interval);
 
@@ -190,7 +200,53 @@ class Ora {
 			cliCursor.show(this.stream);
 		}
 
+		if (this.discardStdin && process.stdin.isTTY) {
+			this.stopDiscardingStdin();
+		}
+
 		return this;
+	}
+
+	startDiscardingStdin() {
+		const {stdin} = process;
+
+		this._stdinOldRawMode = stdin.isRaw;
+		this._stdinOldEmit = stdin.emit;
+		this._stdinOldEmitOwnProperty = Object.prototype.hasOwnProperty.call(stdin, 'emit');
+
+		stdin.setRawMode(true);
+		stdin.on('data', noop);
+
+		const self = this;
+		stdin.emit = function (event, data, ...args) {
+			if (event === 'data' && data.includes(ASCII_ETX_CODE)) {
+				process.emit('SIGINT');
+			}
+
+			self._stdinOldEmit.apply(this, [event, data, ...args]);
+		};
+	}
+
+	stopDiscardingStdin() {
+		if (this._stdinOldEmit !== undefined) {
+			const {stdin} = process;
+			stdin.setRawMode(this._stdinOldRawMode);
+			stdin.removeListener('data', noop);
+
+			if (stdin.listenerCount('data') === 0) {
+				stdin.pause();
+			}
+
+			if (this._stdinOldEmitOwnProperty) {
+				stdin.emit = this._stdinOldEmit;
+			} else {
+				delete stdin.emit;
+			}
+
+			this._stdinOldRawMode = undefined;
+			this._stdinOldEmit = undefined;
+			this._stdinOldEmitOwnProperty = undefined;
+		}
 	}
 
 	succeed(text) {

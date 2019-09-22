@@ -117,6 +117,13 @@ Force enable/disable the spinner. If not specified, the spinner will be enabled 
 
 Note that `{isEnabled: false}` doesn't mean it won't output anything. It just means it won't output the spinner, colors, and other ansi escape codes. It will still log text.
 
+##### discardStdin
+
+Type: `boolean`<br>
+Default: `true`
+
+Discard stdin input (except Ctrl+C) while running if it's TTY. This prevents the spinner from twitching on input, outputting broken lines on <kbd>Enter</kbd> key presses, and prevents buffering of input while the spinner is running.
+
 ### Instance
 
 #### .start(text?)

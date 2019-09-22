@@ -89,6 +89,13 @@ declare namespace ora {
 		Note that `{isEnabled: false}` doesn't mean it won't output anything. It just means it won't output the spinner, colors, and other ansi escape codes. It will still log text.
 		*/
 		readonly isEnabled?: boolean;
+
+		/**
+		Discard stdin input (except Ctrl+C) while running if it's TTY. This prevents the spinner from twitching on input, outputting broken lines on `Enter` key presses, and prevents buffering of input while the spinner is running.
+
+		@default true
+		*/
+		readonly discardStdin?: boolean;
 	}
 
 	interface PersistOptions {
