@@ -22,12 +22,13 @@ class Ora {
 			};
 		}
 
-		this.options = Object.assign({
+		this.options = {
 			text: '',
 			color: 'cyan',
 			stream: process.stderr,
-			discardStdin: true
-		}, options);
+			discardStdin: true,
+			...options
+		};
 
 		this.spinner = this.options.spinner;
 
@@ -278,15 +279,14 @@ class Ora {
 	}
 }
 
-const oraFactory = function (opts) {
-	return new Ora(opts);
+const oraFactory = function (options) {
+	return new Ora(options);
 };
 
 module.exports = oraFactory;
-// TODO: Remove this for the next major release
-module.exports.default = oraFactory;
 
 module.exports.promise = (action, options) => {
+	// eslint-disable-next-line promise/prefer-await-to-then
 	if (typeof action.then !== 'function') {
 		throw new TypeError('Parameter `action` must be a Promise');
 	}
@@ -294,14 +294,14 @@ module.exports.promise = (action, options) => {
 	const spinner = new Ora(options);
 	spinner.start();
 
-	action.then(
-		() => {
+	(async () => {
+		try {
+			await action;
 			spinner.succeed();
-		},
-		() => {
+		} catch (_) {
 			spinner.fail();
 		}
-	);
+	})();
 
 	return spinner;
 };

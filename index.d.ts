@@ -25,7 +25,7 @@ declare namespace ora {
 		readonly text?: string;
 
 		/**
-		Text to display before the spinner. No prefix text will be displayed if set to empty string.
+		Text to display before the spinner. No prefix text will be displayed if set to an empty string.
 		*/
 		readonly prefixText?: string;
 
@@ -70,7 +70,9 @@ declare namespace ora {
 		/**
 		Interval between each frame.
 
-		Spinners provide their own recommended interval, so you don't really need to specify this. Default value: Provided by the spinner or `100`.
+		Spinners provide their own recommended interval, so you don't really need to specify this.
+
+		Default: Provided by the spinner or `100`.
 		*/
 		readonly interval?: number;
 
@@ -107,12 +109,16 @@ declare namespace ora {
 		readonly symbol?: string;
 
 		/**
-		Text to be persisted after the symbol. Default: Current `text`.
+		Text to be persisted after the symbol.
+
+		Default: Current `text`.
 		*/
 		readonly text?: string;
 
 		/**
-		Text to be persisted before the symbol. No prefix text will be displayed if set to empty string. Default: Current `prefixText`.
+		Text to be persisted before the symbol. No prefix text will be displayed if set to an empty string.
+
+		Default: Current `prefixText`.
 		*/
 		readonly prefixText?: string;
 	}
@@ -129,7 +135,7 @@ declare namespace ora {
 		text: string;
 
 		/**
-		Change the text before the spinner. No prefix text will be displayed if set to empty string.
+		Change the text before the spinner. No prefix text will be displayed if set to an empty string.
 		*/
 		prefixText: string;
 
@@ -256,9 +262,6 @@ declare const ora: {
 		action: PromiseLike<unknown>,
 		options?: ora.Options | string
 	): ora.Ora;
-
-	// TODO: Remove this for the next major release
-	default: typeof ora;
 };
 
 export = ora;
