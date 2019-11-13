@@ -34,9 +34,9 @@ class StdinDiscarder {
 					process.emit('SIGINT');
 				}
 
-				self.oldEmit.apply(this, [event, data, ...args]);
+				Reflect.apply(self.oldEmit, this, [event, data, ...args]);
 			} else {
-				process.stdin.emit.apply(this, [event, data, ...args]);
+				Reflect.apply(process.stdin.emit, this, [event, data, ...args]);
 			}
 		};
 	}
