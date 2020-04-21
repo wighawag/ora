@@ -1,4 +1,4 @@
-# ora [![Build Status](https://travis-ci.org/sindresorhus/ora.svg?branch=master)](https://travis-ci.org/sindresorhus/ora)
+# ora [![Build Status](https://travis-ci.com/sindresorhus/ora.svg?branch=master)](https://travis-ci.com/sindresorhus/ora)
 
 > Elegant terminal spinner
 
@@ -8,13 +8,11 @@
 	<br>
 </p>
 
-
 ## Install
 
 ```
 $ npm install ora
 ```
-
 
 ## Usage
 
@@ -28,7 +26,6 @@ setTimeout(() => {
 	spinner.text = 'Loading rainbows';
 }, 1000);
 ```
-
 
 ## API
 
@@ -73,7 +70,7 @@ Or an object like:
 
 Type: `string`\
 Default: `'cyan'`\
-Values: `'black'` `'red'` `'green'` `'yellow'` `'blue'` `'magenta'` `'cyan'` `'white'` `'gray'`
+Values: `'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray'`
 
 Color of the spinner.
 
@@ -228,7 +225,6 @@ Starts a spinner for a promise. The spinner is stopped with `.succeed()` if the 
 
 Type: `Promise`
 
-
 ## FAQ
 
 ### How do I change the color of the text?
@@ -245,7 +241,6 @@ const spinner = ora(`Loading ${chalk.red('unicorns')}`).start();
 ### Why does the spinner freeze?
 
 JavaScript is single-threaded, so synchronous operations blocks the thread, including the spinner animation. Prefer asynchronous operations whenever possible.
-
 
 ## Related
 
