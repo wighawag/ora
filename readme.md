@@ -1,4 +1,4 @@
-# ora [![Build Status](https://travis-ci.com/sindresorhus/ora.svg?branch=master)](https://travis-ci.com/sindresorhus/ora)
+# ora [![Build Status](https://travis-ci.com/sindresorhus/ora.svg?branch=master)](https://travis-ci.com/github/sindresorhus/ora)
 
 > Elegant terminal spinner
 

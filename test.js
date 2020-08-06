@@ -87,27 +87,27 @@ test('chain call to `.start()` with constructor', t => {
 
 test('.succeed()', macro, spinner => {
 	spinner.succeed();
-}, /(✔|√) foo\n$/);
+}, /(?:✔|√) foo\n$/);
 
 test('.succeed() - with new text', macro, spinner => {
 	spinner.succeed('fooed');
-}, /(✔|√) fooed\n$/);
+}, /(?:✔|√) fooed\n$/);
 
 test('.fail()', macro, spinner => {
 	spinner.fail();
-}, /(✖|×) foo\n$/);
+}, /(?:✖|×) foo\n$/);
 
 test('.fail() - with new text', macro, spinner => {
 	spinner.fail('failed to foo');
-}, /(✖|×) failed to foo\n$/);
+}, /(?:✖|×) failed to foo\n$/);
 
 test('.warn()', macro, spinner => {
 	spinner.warn();
-}, /(⚠|‼) foo\n$/);
+}, /(?:⚠|‼) foo\n$/);
 
 test('.info()', macro, spinner => {
 	spinner.info();
-}, /(ℹ|i) foo\n$/);
+}, /(?:ℹ|i) foo\n$/);
 
 test('.stopAndPersist() - with new text', macro, spinner => {
 	spinner.stopAndPersist({text: 'all done'});
@@ -145,7 +145,7 @@ test('.promise() - resolves', async t => {
 	await resolves;
 	stream.end();
 
-	t.regex(stripAnsi(await output), /(✔|√) foo\n$/);
+	t.regex(stripAnsi(await output), /(?:✔|√) foo\n$/);
 });
 
 test('.promise() - rejects', async t => {
@@ -166,7 +166,7 @@ test('.promise() - rejects', async t => {
 
 	stream.end();
 
-	t.regex(stripAnsi(await output), /(✖|×) foo\n$/);
+	t.regex(stripAnsi(await output), /(?:✖|×) foo\n$/);
 });
 
 test('erases wrapped lines', t => {
