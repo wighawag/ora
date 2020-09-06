@@ -122,6 +122,7 @@ class Ora {
 		this.stream = this.options.stream;
 		this.id = undefined;
 		this.isEnabled = typeof this.options.isEnabled === 'boolean' ? this.options.isEnabled : isInteractive({stream: this.stream});
+		this.isSilent = typeof this.options.isSilent === 'boolean' ? this.options.isSilent : false;
 
 		// Set *after* `this.stream`
 		this.text = this.options.text;
@@ -219,6 +220,30 @@ class Ora {
 		this.updateLineCount();
 	}
 
+	get isEnabled() {
+		return this._isEnabled && !this.isSilent;
+	}
+
+	set isEnabled(value) {
+		if (typeof value !== 'boolean') {
+			throw new TypeError('The `isEnabled` option must be a boolean');
+		}
+
+		this._isEnabled = value;
+	}
+
+	get isSilent() {
+		return this._isSilent;
+	}
+
+	set isSilent(value) {
+		if (typeof value !== 'boolean') {
+			throw new TypeError('The `isSilent` option must be a boolean');
+		}
+
+		this._isSilent = value;
+	}
+
 	frame() {
 		const {frames} = this.spinner;
 		let frame = frames[this.frameIndex];
@@ -254,6 +279,10 @@ class Ora {
 	}
 
 	render() {
+		if (this.isSilent) {
+			return this;
+		}
+
 		this.clear();
 		this.stream.write(this.frame());
 		this.linesToClear = this.lineCount;
@@ -264,6 +293,10 @@ class Ora {
 	start(text) {
 		if (text) {
 			this.text = text;
+		}
+
+		if (this.isSilent) {
+			return this;
 		}
 
 		if (!this.isEnabled) {
@@ -331,6 +364,10 @@ class Ora {
 	}
 
 	stopAndPersist(options = {}) {
+		if (this.isSilent) {
+			return this;
+		}
+
 		const prefixText = options.prefixText || this.prefixText;
 		const text = options.text || this.text;
 		const fullText = (typeof text === 'string') ? ' ' + text : '';

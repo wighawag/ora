@@ -16,6 +16,7 @@ ora({indent: 1});
 ora({interval: 80});
 ora({stream: new PassThroughStream()});
 ora({isEnabled: true});
+ora({isSilent: false});
 ora({discardStdin: true});
 
 spinner.color = 'yellow';
@@ -49,5 +50,6 @@ promise(resolves, {
 	stream: new PassThroughStream(),
 	text: 'foo',
 	color: 'blue',
-	isEnabled: true
+	isEnabled: true,
+	isSilent: false
 });
