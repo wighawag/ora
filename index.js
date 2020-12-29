@@ -181,8 +181,18 @@ class Ora {
 		return this[TEXT];
 	}
 
+	set text(value) {
+		this[TEXT] = value;
+		this.updateLineCount();
+	}
+
 	get prefixText() {
 		return this[PREFIX_TEXT];
+	}
+
+	set prefixText(value) {
+		this[PREFIX_TEXT] = value;
+		this.updateLineCount();
 	}
 
 	get isSpinning() {
@@ -208,16 +218,6 @@ class Ora {
 		for (const line of stripAnsi(fullPrefixText + '--' + this[TEXT]).split('\n')) {
 			this.lineCount += Math.max(1, Math.ceil(wcwidth(line) / columns));
 		}
-	}
-
-	set text(value) {
-		this[TEXT] = value;
-		this.updateLineCount();
-	}
-
-	set prefixText(value) {
-		this[PREFIX_TEXT] = value;
-		this.updateLineCount();
 	}
 
 	get isEnabled() {
@@ -398,7 +398,7 @@ module.exports.promise = (action, options) => {
 		try {
 			await action;
 			spinner.succeed();
-		} catch (_) {
+		} catch {
 			spinner.fail();
 		}
 	})();
