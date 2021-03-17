@@ -1,7 +1,7 @@
 import {expectType} from 'tsd';
 import {PassThrough as PassThroughStream} from 'stream';
-import ora = require('.');
-import {promise} from '.';
+import ora = require('./index.js');
+import {promise} from './index.js';
 
 const spinner = ora('Loading unicorns');
 ora({text: 'Loading unicorns'});

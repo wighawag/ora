@@ -2,9 +2,9 @@ import {PassThrough as PassThroughStream} from 'stream';
 import getStream from 'get-stream';
 import test from 'ava';
 import stripAnsi from 'strip-ansi';
-import Ora from '.';
+import Ora from './index.js';
 
-const spinnerChar = process.platform === 'win32' ? '-' : '⠋';
+const spinnerCharacter = process.platform === 'win32' ? '-' : '⠋';
 const noop = () => {};
 
 const getPassThroughStream = () => {
@@ -41,7 +41,7 @@ const macro = async (t, fn, expected, extraOptions = {}) => {
 
 test('main', macro, spinner => {
 	spinner.stop();
-}, new RegExp(`${spinnerChar} foo`));
+}, new RegExp(`${spinnerCharacter} foo`));
 
 test('title shortcut', async t => {
 	const stream = getPassThroughStream();
@@ -58,7 +58,7 @@ test('title shortcut', async t => {
 
 	stream.end();
 
-	t.is(await output, `${spinnerChar} foo`);
+	t.is(await output, `${spinnerCharacter} foo`);
 });
 
 test('`.id` is not set when created', t => {
@@ -165,7 +165,7 @@ test('.promise() - resolves', async t => {
 test('.promise() - rejects', async t => {
 	const stream = getPassThroughStream();
 	const output = getStream(stream);
-	const rejects = Promise.reject(new Error());
+	const rejects = Promise.reject(new Error()); // eslint-disable-line unicorn/error-message
 
 	Ora.promise(rejects, {
 		stream,
