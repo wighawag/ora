@@ -226,11 +226,28 @@ Change the spinner indent.
 ### ora.promise(action, text)
 ### ora.promise(action, options)
 
-Starts a spinner for a promise. The spinner is stopped with `.succeed()` if the promise fulfills or with `.fail()` if it rejects. Returns the spinner instance.
+Starts a spinner for a function or a promise. The spinner is stopped with `.succeed()` if the promise fulfills or with `.fail()` if it rejects. Returns the promise.
 
 #### action
 
-Type: `Promise`
+Type: `Promise | ((spinner: ora.Ora) => Promise)`
+
+#### options
+
+Type: `object`
+
+All of the [options](#options) plus the following:
+
+##### successText
+Type: `string | ((result: T) => string)`
+
+The new text of the spinner when the promise is resolved. If undefined, will keep the initial text.
+
+##### failText
+Type: `string | ((error: Error) => string)`
+
+The new text of the spinner when the promise is rejected. If undefined, will keep the initial text.
+
 
 ## FAQ
 
