@@ -47,7 +47,7 @@ export interface Options {
 	readonly spinner?: SpinnerName | Spinner;
 
 	/**
-	Color of the spinner.
+	The color of the spinner.
 
 	@default 'cyan'
 	*/
@@ -150,19 +150,16 @@ export interface PromiseOptions<T> extends Options {
 
 export interface Ora {
 	/**
-	A boolean of whether the instance is currently spinning.
-	*/
-	readonly isSpinning: boolean;
-
-	/**
 	Change the text after the spinner.
 	*/
 	text: string;
 
 	/**
-	Change the text or function that returns text before the spinner. No prefix text will be displayed if set to an empty string.
+	Change the text or function that returns text before the spinner.
+
+	No prefix text will be displayed if set to an empty string.
 	*/
-	prefixText: string | PrefixTextGenerator;
+	prefixText: string;
 
 	/**
 	Change the spinner color.
@@ -170,21 +167,31 @@ export interface Ora {
 	color: Color;
 
 	/**
-	Change the spinner.
-	*/
-	spinner: SpinnerName | Spinner;
-
-	/**
 	Change the spinner indent.
 	*/
 	indent: number;
+
+	/**
+	Get the spinner.
+	*/
+	get spinner(): Spinner;
+
+	/**
+	Set the spinner.
+	*/
+	set spinner(spinner: SpinnerName | Spinner);
+
+	/**
+	A boolean of whether the instance is currently spinning.
+	*/
+	get isSpinning(): boolean;
 
 	/**
 	The interval between each frame.
 
 	The interval is decided by the chosen spinner.
 	*/
-	readonly interval: number;
+	get interval(): number;
 
 	/**
 	Start the spinner.
@@ -192,14 +199,14 @@ export interface Ora {
 	@param text - Set the current text.
 	@returns The spinner instance.
 	*/
-	start(text?: string): Ora;
+	start(text?: string): this;
 
 	/**
 	Stop and clear the spinner.
 
 	@returns The spinner instance.
 	*/
-	stop(): Ora;
+	stop(): this;
 
 	/**
 	Stop the spinner, change it to a green `✔` and persist the current text, or `text` if provided.
@@ -207,7 +214,7 @@ export interface Ora {
 	@param text - Will persist text if provided.
 	@returns The spinner instance.
 	*/
-	succeed(text?: string): Ora;
+	succeed(text?: string): this;
 
 	/**
 	Stop the spinner, change it to a red `✖` and persist the current text, or `text` if provided.
@@ -215,7 +222,7 @@ export interface Ora {
 	@param text - Will persist text if provided.
 	@returns The spinner instance.
 	*/
-	fail(text?: string): Ora;
+	fail(text?: string): this;
 
 	/**
 	Stop the spinner, change it to a yellow `⚠` and persist the current text, or `text` if provided.
@@ -223,7 +230,7 @@ export interface Ora {
 	@param text - Will persist text if provided.
 	@returns The spinner instance.
 	*/
-	warn(text?: string): Ora;
+	warn(text?: string): this;
 
 	/**
 	Stop the spinner, change it to a blue `ℹ` and persist the current text, or `text` if provided.
@@ -231,28 +238,28 @@ export interface Ora {
 	@param text - Will persist text if provided.
 	@returns The spinner instance.
 	*/
-	info(text?: string): Ora;
+	info(text?: string): this;
 
 	/**
 	Stop the spinner and change the symbol or text.
 
 	@returns The spinner instance.
 	*/
-	stopAndPersist(options?: PersistOptions): Ora;
+	stopAndPersist(options?: PersistOptions): this;
 
 	/**
 	Clear the spinner.
 
 	@returns The spinner instance.
 	*/
-	clear(): Ora;
+	clear(): this;
 
 	/**
 	Manually render a new frame.
 
 	@returns The spinner instance.
 	*/
-	render(): Ora;
+	render(): this;
 
 	/**
 	Get a new frame.

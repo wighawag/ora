@@ -10,8 +10,8 @@
 
 ## Install
 
-```
-$ npm install ora
+```sh
+npm install ora
 ```
 
 ## Usage
@@ -72,7 +72,7 @@ Type: `string`\
 Default: `'cyan'`\
 Values: `'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' | 'gray'`
 
-Color of the spinner.
+The color of the spinner.
 
 ##### hideCursor
 
@@ -132,6 +132,38 @@ This has no effect on Windows as there's no good way to implement discarding std
 
 ### Instance
 
+#### .text <sup>get/set</sup>
+
+Change the text after the spinner.
+
+#### .prefixText <sup>get/set</sup>
+
+Change the text before the spinner.
+
+No prefix text will be displayed if set to an empty string.
+
+#### .color <sup>get/set</sup>
+
+Change the spinner color.
+
+#### .spinner <sup>get/set</sup>
+
+Change the spinner.
+
+#### .indent <sup>get/set</sup>
+
+Change the spinner indent.
+
+#### .isSpinning <sup>get</sup>
+
+A boolean of whether the instance is currently spinning.
+
+#### .interval <sup>get</sup>
+
+The interval between each frame.
+
+The interval is decided by the chosen spinner.
+
 #### .start(text?)
 
 Start the spinner. Returns the instance. Set the current text if `text` is provided.
@@ -155,10 +187,6 @@ Stop the spinner, change it to a yellow `⚠` and persist the current text, or `
 #### .info(text?)
 
 Stop the spinner, change it to a blue `ℹ` and persist the current text, or `text` if provided. Returns the instance.
-
-#### .isSpinning
-
-A boolean of whether the instance is currently spinning.
 
 #### .stopAndPersist(options?)
 
@@ -202,26 +230,6 @@ Manually render a new frame. Returns the instance.
 #### .frame()
 
 Get a new frame.
-
-#### .text
-
-Change the text after the spinner.
-
-#### .prefixText
-
-Change the text before the spinner. No prefix text will be displayed if set to an empty string.
-
-#### .color
-
-Change the spinner color.
-
-#### .spinner
-
-Change the spinner.
-
-#### .indent
-
-Change the spinner indent.
 
 ### oraPromise(action, text)
 ### oraPromise(action, options)

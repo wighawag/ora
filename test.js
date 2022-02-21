@@ -46,26 +46,8 @@ test('main', macro, spinner => {
 	spinner.stop();
 }, new RegExp(`${spinnerCharacter} foo`));
 
-test('title shortcut', async t => {
-	const stream = getPassThroughStream();
-	const output = getStream(stream);
-
-	const spinner = ora('foo');
-	spinner.stream = stream;
-	spinner.color = false;
-	spinner.isEnabled = true;
-	spinner.start();
-	t.true(spinner.isSpinning);
-	spinner.stop();
-
-	stream.end();
-
-	t.is(await output, `${spinnerCharacter} foo`);
-});
-
 test('`.id` is not set when created', t => {
 	const spinner = ora('foo');
-	t.falsy(spinner.id);
 	t.false(spinner.isSpinning);
 });
 
@@ -84,8 +66,8 @@ test('chain call to `.start()` with constructor', t => {
 		isEnabled: true,
 	}).start();
 
-	t.truthy(spinner.id);
-	t.true(spinner.isEnabled);
+	t.truthy(spinner.isSpinning);
+	t.true(spinner._isEnabled);
 });
 
 test('.succeed()', macro, spinner => {
@@ -268,18 +250,23 @@ test('reset frameIndex when setting new spinner', async t => {
 	const spinner = ora({
 		stream,
 		isEnabled: true,
-		spinner: {frames: ['foo', 'fooo']},
+		spinner: {
+			frames: [
+				'foo',
+				'fooo',
+			],
+		},
 	});
 
 	spinner.render();
-	t.is(spinner.frameIndex, 1);
+	t.is(spinner._frameIndex, 1);
 
 	spinner.spinner = {frames: ['baz']};
 	spinner.render();
 
 	stream.end();
 
-	t.is(spinner.frameIndex, 0);
+	t.is(spinner._frameIndex, 0);
 	t.regex(stripAnsi(await output), /foo baz/);
 });
 
@@ -385,11 +372,11 @@ test('handles wrapped lines when length of indent + text is greater than columns
 
 	spinner.render();
 
-	spinner.text = '0'.repeat(spinner.stream.columns - 5);
+	spinner.text = '0'.repeat(spinner._stream.columns - 5);
 	spinner.indent = 15;
 	spinner.render();
 
-	t.is(spinner.lineCount, 2);
+	t.is(spinner._lineCount, 2);
 });
 
 test('.stopAndPersist() with prefixText', macro, spinner => {
@@ -430,28 +417,28 @@ const currentClearMethod = transFormTTY => {
 	let firstIndent = true;
 
 	spinner.clear = function () {
-		if (!this.isEnabled || !this.stream.isTTY) {
+		if (!this._isEnabled || !this._stream.isTTY) {
 			return this;
 		}
 
-		for (let index = 0; index < this.linesToClear; index++) {
+		for (let index = 0; index < this._linesToClear; index++) {
 			if (index > 0) {
-				this.stream.moveCursor(0, -1);
+				this._stream.moveCursor(0, -1);
 			}
 
-			this.stream.clearLine();
-			this.stream.cursorTo(this.indent);
+			this._stream.clearLine();
+			this._stream.cursorTo(this.indent);
 		}
 
 		// It's too quick to be noticeable, but indent does not get applied
 		// for the first render if `linesToClear === 0`. The new clear method
 		// doesn't have this issue, since it's called outside of the loop.
-		if (this.linesToClear === 0 && firstIndent && this.indent) {
-			this.stream.cursorTo(this.indent);
+		if (this._linesToClear === 0 && firstIndent && this.indent) {
+			this._stream.cursorTo(this.indent);
 			firstIndent = false;
 		}
 
-		this.linesToClear = 0;
+		this._linesToClear = 0;
 
 		return this;
 	}.bind(spinner);
@@ -572,36 +559,36 @@ test('new clear method test, erases wrapped lines', t => {
 	t.is(cursorAtRow(), -2);
 
 	currentOra.clear();
-	currentOra.text = '0'.repeat(currentOra.stream.columns + 10);
+	currentOra.text = '0'.repeat(currentOra._stream.columns + 10);
 	currentOra.render();
 	currentOra.render();
 
 	spinner.clear();
-	spinner.text = '0'.repeat(spinner.stream.columns + 10);
+	spinner.text = '0'.repeat(spinner._stream.columns + 10);
 	spinner.render();
 	spinner.render();
 	t.is(clearedLines(), 2);
 	t.is(cursorAtRow(), -1);
 
 	currentOra.clear();
-	currentOra.text = '🦄'.repeat(currentOra.stream.columns + 10);
+	currentOra.text = '🦄'.repeat(currentOra._stream.columns + 10);
 	currentOra.render();
 	currentOra.render();
 
 	spinner.clear();
-	spinner.text = '🦄'.repeat(spinner.stream.columns + 10);
+	spinner.text = '🦄'.repeat(spinner._stream.columns + 10);
 	spinner.render();
 	spinner.render();
 	t.is(clearedLines(), 3);
 	t.is(cursorAtRow(), -2);
 
 	currentOra.clear();
-	currentOra.text = '🦄'.repeat(currentOra.stream.columns - 2) + '\nfoo';
+	currentOra.text = '🦄'.repeat(currentOra._stream.columns - 2) + '\nfoo';
 	currentOra.render();
 	currentOra.render();
 
 	spinner.clear();
-	spinner.text = '🦄'.repeat(spinner.stream.columns - 2) + '\nfoo';
+	spinner.text = '🦄'.repeat(spinner._stream.columns - 2) + '\nfoo';
 	spinner.render();
 	spinner.render();
 	t.is(clearedLines(), 3);
