@@ -119,7 +119,7 @@ class Ora {
 
 		this.color = this.options.color;
 		this.hideCursor = this.options.hideCursor !== false;
-		this.interval = this.options.interval || this.spinner.interval || 100;
+		this._interval = this.options.interval || this.spinner.interval || 100;
 		this.stream = this.options.stream;
 		this.id = undefined;
 		this.isEnabled = typeof this.options.isEnabled === 'boolean' ? this.options.isEnabled : isInteractive({stream: this.stream});
@@ -149,8 +149,12 @@ class Ora {
 
 	_updateInterval(interval) {
 		if (interval !== undefined) {
-			this.interval = interval;
+			this._interval = interval;
 		}
+	}
+
+	get interval() {
+		return this._interval;
 	}
 
 	get spinner() {
@@ -330,7 +334,7 @@ class Ora {
 		}
 
 		this.render();
-		this.id = setInterval(this.render.bind(this), this.interval);
+		this.id = setInterval(this.render.bind(this), this._interval);
 
 		return this;
 	}

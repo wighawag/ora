@@ -180,6 +180,13 @@ export interface Ora {
 	indent: number;
 
 	/**
+	The interval between each frame.
+
+	The interval is decided by the chosen spinner.
+	*/
+	readonly interval: number;
+
+	/**
 	Start the spinner.
 
 	@param text - Set the current text.
