@@ -1,13 +1,14 @@
 import process from 'node:process';
 import chalk from 'chalk';
 import cliCursor from 'cli-cursor';
-import cliSpinners from 'cli-spinners';
+import cliSpinners, { SpinnerName } from 'cli-spinners';
 import logSymbols from 'log-symbols';
 import stripAnsi from 'strip-ansi';
 import wcwidth from 'wcwidth';
 import isInteractive from 'is-interactive';
 import isUnicodeSupported from 'is-unicode-supported';
 import stdinDiscarder from 'stdin-discarder';
+import { Options, PrefixTextGenerator, PromiseOptions, Spinner, SuffixTextGenerator } from './types';
 
 class Ora {
 	#linesToClear = 0;
@@ -15,20 +16,24 @@ class Ora {
 	#lineCount = 0;
 	#frameIndex = 0;
 	#options;
-	#spinner;
+	#spinner: Spinner | SpinnerName | undefined;
 	#stream;
-	#id;
+	#id: any | undefined;
 	#initialInterval;
 	#isEnabled;
 	#isSilent;
-	#indent;
-	#text;
-	#prefixText;
-	#suffixText;
+	#indent: number | undefined;
+	#text: string | undefined;
+	#prefixText: string | PrefixTextGenerator | undefined;
+	#suffixText: string | SuffixTextGenerator | undefined;
 
 	color;
 
-	constructor(options) {
+	_stream: any;
+	_isEnabled: any;
+	lastIndent: any;
+
+	constructor(options: string | Options) {
 		if (typeof options === 'string') {
 			options = {
 				text: options,
@@ -92,7 +97,10 @@ class Ora {
 		return this.#indent;
 	}
 
-	set indent(indent = 0) {
+	set indent(indent) {
+		if (!indent) {
+			indent = 0;
+		}
 		if (!(indent >= 0 && Number.isInteger(indent))) {
 			throw new Error('The `indent` option must be an integer from 0 and up');
 		}
@@ -102,7 +110,7 @@ class Ora {
 	}
 
 	get interval() {
-		return this.#initialInterval ?? this.#spinner.interval ?? 100;
+		return this.#initialInterval ?? (this.#spinner as any).interval ?? 100;
 	}
 
 	get spinner() {
@@ -124,7 +132,7 @@ class Ora {
 		} else if (spinner === undefined) {
 			// Set default spinner
 			this.#spinner = cliSpinners.dots;
-		} else if (spinner !== 'default' && cliSpinners[spinner]) {
+		} else if ((spinner as any) !== 'default' && cliSpinners[spinner]) {
 			this.#spinner = cliSpinners[spinner];
 		} else {
 			throw new Error(`There is no built-in spinner named '${spinner}'. See https://github.com/sindresorhus/cli-spinners/blob/main/spinners.json for a full list.`);
@@ -135,7 +143,10 @@ class Ora {
 		return this.#text;
 	}
 
-	set text(value = '') {
+	set text(value) {
+		if (!value) {
+			value = '';
+		}
 		this.#text = value;
 		this.#updateLineCount();
 	}
@@ -144,7 +155,10 @@ class Ora {
 		return this.#prefixText;
 	}
 
-	set prefixText(value = '') {
+	set prefixText(value) {
+		if (!value) {
+			value = '';
+		}
 		this.#prefixText = value;
 		this.#updateLineCount();
 	}
@@ -153,7 +167,10 @@ class Ora {
 		return this.#suffixText;
 	}
 
-	set suffixText(value = '') {
+	set suffixText(value) {
+		if (!value) {
+			value = '';
+		}
 		this.#suffixText = value;
 		this.#updateLineCount();
 	}
@@ -187,10 +204,10 @@ class Ora {
 	}
 
 	#updateLineCount() {
-		const columns = this.#stream.columns ?? 80;
+		const columns = (this.#stream as any).columns ?? 80;
 		const fullPrefixText = this.#getFullPrefixText(this.#prefixText, '-');
 		const fullSuffixText = this.#getFullSuffixText(this.#suffixText, '-');
-		const fullText = ' '.repeat(this.#indent) + fullPrefixText + '--' + this.#text + '--' + fullSuffixText;
+		const fullText = ' '.repeat((this.#indent as any)) + fullPrefixText + '--' + this.#text + '--' + fullSuffixText;
 
 		this.#lineCount = 0;
 		for (const line of stripAnsi(fullText).split('\n')) {
@@ -223,11 +240,11 @@ class Ora {
 	}
 
 	frame() {
-		const {frames} = this.#spinner;
+		const {frames} = (this.#spinner as any);
 		let frame = frames[this.#frameIndex];
 
 		if (this.color) {
-			frame = chalk[this.color](frame);
+			frame = (chalk as any)[this.color](frame);
 		}
 
 		this.#frameIndex = ++this.#frameIndex % frames.length;
@@ -239,22 +256,22 @@ class Ora {
 	}
 
 	clear() {
-		if (!this.#isEnabled || !this.#stream.isTTY) {
+		if (!this.#isEnabled || !(this.#stream as any).isTTY) {
 			return this;
 		}
 
-		this.#stream.cursorTo(0);
+		(this.#stream as any).cursorTo(0);
 
 		for (let index = 0; index < this.#linesToClear; index++) {
 			if (index > 0) {
-				this.#stream.moveCursor(0, -1);
+				(this.#stream as any).moveCursor(0, -1);
 			}
 
-			this.#stream.clearLine(1);
+			(this.#stream as any).clearLine(1);
 		}
 
 		if (this.#indent || this.lastIndent !== this.#indent) {
-			this.#stream.cursorTo(this.#indent);
+			(this.#stream as any).cursorTo(this.#indent);
 		}
 
 		this.lastIndent = this.#indent;
@@ -275,7 +292,7 @@ class Ora {
 		return this;
 	}
 
-	start(text) {
+	start(text?: any) {
 		if (text) {
 			this.text = text;
 		}
@@ -332,23 +349,23 @@ class Ora {
 		return this;
 	}
 
-	succeed(text) {
+	succeed(text?: string) {
 		return this.stopAndPersist({symbol: logSymbols.success, text});
 	}
 
-	fail(text) {
+	fail(text?: string) {
 		return this.stopAndPersist({symbol: logSymbols.error, text});
 	}
 
-	warn(text) {
+	warn(text?: string) {
 		return this.stopAndPersist({symbol: logSymbols.warning, text});
 	}
 
-	info(text) {
+	info(text?: string) {
 		return this.stopAndPersist({symbol: logSymbols.info, text});
 	}
 
-	stopAndPersist(options = {}) {
+	stopAndPersist(options: any = {}) {
 		if (this.#isSilent) {
 			return this;
 		}
@@ -373,13 +390,13 @@ class Ora {
 	}
 }
 
-export default function ora(options) {
+export default function ora(options: string | Options) {
 	return new Ora(options);
 }
 
-export async function oraPromise(action, options) {
+export async function oraPromise<T>(action: PromiseLike<T> | ((spinner: Ora) => PromiseLike<T>), options: string | PromiseOptions<T>) {
 	const actionIsFunction = typeof action === 'function';
-	const actionIsPromise = typeof action.then === 'function';
+	const actionIsPromise = typeof (action as any).then === 'function';
 
 	if (!actionIsFunction && !actionIsPromise) {
 		throw new TypeError('Parameter `action` must be a Function or a Promise');
@@ -406,7 +423,7 @@ export async function oraPromise(action, options) {
 		spinner.fail(
 			failText === undefined
 				? undefined
-				: (typeof failText === 'string' ? failText : failText(error)),
+				: (typeof failText === 'string' ? failText : failText(error as any)),
 		);
 
 		throw error;

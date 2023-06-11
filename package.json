@@ -1,7 +1,7 @@
 {
-	"name": "ora",
-	"version": "6.3.1",
-	"description": "Elegant terminal spinner",
+	"name": "ora-cjs",
+	"version": "0.0.1",
+	"description": "Elegant terminal spinner (cjs version)",
 	"license": "MIT",
 	"repository": "sindresorhus/ora",
 	"funding": "https://github.com/sponsors/sindresorhus",
@@ -10,17 +10,18 @@
 		"email": "sindresorhus@gmail.com",
 		"url": "https://sindresorhus.com"
 	},
-	"type": "module",
-	"exports": "./index.js",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
 	"engines": {
 		"node": ">=16"
 	},
 	"scripts": {
-		"test": "xo && ava && tsd"
+		"test": "xo && ava && tsd",
+		"build": "rimraf dist && tsup src/index.ts --dts --format cjs",
+		"dev": "rimraf dist && tsup src/index.ts --dts --format cjs --watch"
 	},
 	"files": [
-		"index.js",
-		"index.d.ts"
+		"dist"
 	],
 	"keywords": [
 		"cli",
@@ -51,10 +52,14 @@
 	},
 	"devDependencies": {
 		"@types/node": "^20.1.4",
+		"@types/wcwidth": "^1.0.0",
 		"ava": "^5.2.0",
 		"get-stream": "^6.0.1",
+		"rimraf": "^5.0.1",
 		"transform-tty": "^1.0.11",
 		"tsd": "^0.28.1",
+		"tsup": "^6.7.0",
+		"typescript": "^5.1.3",
 		"xo": "^0.54.2"
 	},
 	"xo": {
