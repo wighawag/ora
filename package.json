@@ -1,6 +1,6 @@
 {
 	"name": "ora-cjs",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Elegant terminal spinner (cjs version)",
 	"license": "MIT",
 	"repository": "sindresorhus/ora",
@@ -40,7 +40,7 @@
 		"idle"
 	],
 	"dependencies": {
-		"chalk": "^5.2.0",
+		"chalk": "^4.1.2",
 		"cli-cursor": "^4.0.0",
 		"cli-spinners": "^2.9.0",
 		"is-interactive": "^2.0.0",
